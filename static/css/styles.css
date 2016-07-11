@@ -1,0 +1,17 @@
+body {
+  padding-top: 70px;
+}
+header .navbar-brand {
+  color: #e0cb4b !important;
+  font-weight: bold;
+}
+header .user-auth .err {
+  padding: 7px 5px 10px 5px;
+}
+footer {
+  height: 60px;
+}
+.films-list p.desc {
+  height: 125px;
+  overflow: hidden;
+}

@@ -1,0 +1,24 @@
+<form class="navbar-form navbar-right user-auth"  role="search" method="post">
+    {% csrf_token %}
+
+    {% if user.is_authenticated %}
+        <div class="user">
+            <span>{{ user.username }}</span>
+            <a href="#" class="btn btn-default logout">Выйти</a>
+        </div>
+    {% else %}
+        <div class="signin hide">
+            <div class="form-group">
+                <input type="text" class="form-control" name="username"
+                       placeholder="Логин">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="password"
+                       placeholder="Пароль">
+            </div>
+            <a class="signin btn btn-default">Войти </a>
+        </div>
+        <span class="err alert alert-danger hide"></span>
+        <a class="show-signin btn btn-default">Вход на сайт</a>
+    {% endif %}
+</form>
