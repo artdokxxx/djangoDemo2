@@ -1,24 +1,14 @@
 from django.db import models
-from django.shortcuts import render
 
 
-def main(request):
-    # FIXME: Move to DB
-    films = [
-        {
-            'name': "Илюзия обмана",
-            'desc': "Команда лучших иллюзионистов мира проворачивает дерзкие ограбления прямо во время своих шоу, играя в кошки-мышки с агентами ФБР.",
-            'preview': "film_preview2.jpeg"
-        },
-        {
-            'name': "Дурак",
-            'desc': "В любую секунду здание может рухнуть. И кто бы мог подумать, что судьбы людей окажутся в руках простого сантехника. Но удастся ли ему что-то изменить и предотвратить катастрофу?",
-            'preview': "film_preview1.jpeg"
-        },
-        {
-            'name': "12 лет рабства",
-            'desc': "Соломон Нортап был женатым и образованным мужчиной, который жил и работал в штате Нью-Йорк, когда два человека однажды предложили ему привлекательную работу в Вашингтоне. По прибытии он был похищен, стал рабом и влачил жалкую жизнь, переходя от одного хозяина к другому.",
-            'preview': "film_preview3.jpeg"
-        }
-    ]
-    return render(request, 'index.html', {'films':films*6})
+class Categories(models.Model):
+    name = models.CharField(verbose_name='Название категории', max_length=32, unique=True)
+    desc = models.TextField(verbose_name='Описание категории', blank=True, null=True)
+
+
+class Films(models.Model):
+    category = models.ManyToManyField(Categories, verbose_name='Категории')
+    name = models.CharField(verbose_name='Название фильма', max_length=64, unique=True)
+    image = models.CharField(verbose_name='Обложка', max_length=64)
+    preview = models.CharField(verbose_name='Превью', max_length=64, blank=True)
+    desc = models.TextField(verbose_name='Описание', blank=True)
