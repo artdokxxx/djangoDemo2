@@ -16,14 +16,31 @@ Including another URLconf
 from django.conf.urls import url
 from mainApp.views import *
 from mainApp.api import *
+import adminApp.views as admin
 
 
 urlpatterns = [
     url(r'^$', main, name='Главная страница')
 ]
 
+# Users
+urlpatterns += [
+    url(r'^user\/registration\/$', user_registration, name='Регистрация'),
+]
+
+
 # API
 urlpatterns += [
     url(r'^api\/sign_in\/$', sign_in, name='Авторизация'),
-    url(r'^api\/logout\/$', logout, name='Выход из учётной записи')
+    url(r'^api\/logout\/$', logout, name='Выход из учётной записи'),
+    url(r'^api\/users\/delete\/(\d+)\/$', delete, name='Удаление пользователя'),
+    url(r'^api\/users\/get\/$', lists, name='Получение списка пользователей'),
+]
+
+
+# ADMIN
+urlpatterns += [
+    url(r'^admin\/$', admin.main, name='Дашбоард'),
+    url(r'^admin\/users/$', admin.users_list, name='Управление пользователями'),
+    url(r'^admin\/films/$', admin.main, name='Управление фильмами'),
 ]

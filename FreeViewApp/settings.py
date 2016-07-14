@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mainApp',
+    'mainApp'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -105,6 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
 LANGUAGE_CODE = 'ru-RU'
+LOCALE_PATHS = os.path.join(BASE_DIR, "locales"),
 
 TIME_ZONE = 'UTC'
 

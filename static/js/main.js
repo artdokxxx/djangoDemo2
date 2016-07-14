@@ -45,6 +45,7 @@ requirejs(['bootstrap', 'lodash'], function() {
     // Show-Hide signin form in header
     $('.user-auth .show-signin').on('click', function() {
         $(this).addClass('hide');
+        $('.user-auth .reg').addClass('hide');
         $('.user-auth div.signin').removeClass('hide');
         $('.user-auth .err').addClass('hide');
     });
@@ -60,6 +61,7 @@ requirejs(['bootstrap', 'lodash'], function() {
                 .removeClass('hide');
             $('.user-auth div.signin').addClass('hide');
             $('.user-auth .show-signin').removeClass('hide');
+            $('.user-auth .reg').removeClass('hide');
 
             return false;
         };
@@ -97,4 +99,8 @@ requirejs(['bootstrap', 'lodash'], function() {
             }
         );
     });
+    
+    $('.user-auth .reg').on('click', function () {
+        window.location.href = '/user/registration/';
+    })
 });
