@@ -15,8 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import url
 from mainApp.views import *
-from mainApp.api import *
 import adminApp.views as admin
+import apiApp.views as api
 
 
 urlpatterns = [
@@ -28,13 +28,12 @@ urlpatterns += [
     url(r'^user\/registration\/$', user_registration, name='Регистрация'),
 ]
 
-
 # API
 urlpatterns += [
-    url(r'^api\/sign_in\/$', sign_in, name='Авторизация'),
-    url(r'^api\/logout\/$', logout, name='Выход из учётной записи'),
-    url(r'^api\/users\/delete\/(\d+)\/$', delete, name='Удаление пользователя'),
-    url(r'^api\/users\/get\/$', lists, name='Получение списка пользователей'),
+    url(r'^api\/sign_in\/$', api.sign_in, name='Авторизация'),
+    url(r'^api\/logout\/$', api.logout, name='Выход из учётной записи'),
+    url(r'^api\/users\/delete\/(\d+)\/$', api.delete, name='Удаление пользователя'),
+    url(r'^api\/users\/get\/$', api.lists, name='Получение списка пользователей'),
 ]
 
 
