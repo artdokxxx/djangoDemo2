@@ -9,7 +9,6 @@ from django.http import JsonResponse
 
 @csrf_protect
 def sign_in(request):
-    # FIXME: Добавить try catch
     res = _fail()
     login = request.POST.get('login', None)
     pwd = request.POST.get('pwd', None)
@@ -26,8 +25,15 @@ def sign_in(request):
     return res
 
 
-#@user_passes_test(lambda u: u.is_superuser)
-def lists(request):
+@user_passes_test(lambda u: u.is_superuser)
+def users_lists(request):
+    def mark_i_am(user):
+        user = model_to_dict(user)
+        if user['id'] == request.user.id:
+            user['i_am'] = True
+
+        return user
+
     res = _fail()
 
     users_list = User.objects.all()
@@ -44,7 +50,7 @@ def lists(request):
     if sortBy:
         if request.GET.get('sortDir', False) == 'desc':
             sortBy = '-'+sortBy
-            users_list = users_list.order_by(sortBy)
+        users_list = users_list.order_by(sortBy)
 
     paginator = Paginator(users_list, request.GET.get('pageSize', 50))
     page = request.GET.get('page', 1)
@@ -58,12 +64,12 @@ def lists(request):
     except EmptyPage:
         users = paginator.page(paginator.num_pages)
 
-    res = _success(result=[model_to_dict(user) for user in users], count=len(users), pages=pages)
+    res = _success(result=[mark_i_am(user) for user in users], count=len(users), pages=pages)
     return res
 
 
-#@user_passes_test(lambda u: u.is_superuser)
-def delete(request, id):
+@user_passes_test(lambda u: u.is_superuser)
+def user_delete(request, id):
     res = _fail()
 
     user = User.objects.get(id=id)
@@ -75,9 +81,21 @@ def delete(request, id):
     return res
 
 
+@user_passes_test(lambda u: u.is_superuser)
+def user_activation(request, id):
+    res = _fail()
+
+    user = User.objects.get(id=id)
+    if user:
+        user.is_active = True
+        user.save()
+
+        res = _success()
+    return res
+
+
 @csrf_protect
 def logout(request):
-    # FIXME: Добавить try catch
     auth.logout(request)
     return _success()
 

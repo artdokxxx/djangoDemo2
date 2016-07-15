@@ -5,16 +5,19 @@
         <div class="user">
             <span>{{ user.username }}</span>
             <a href="#" class="btn btn-default logout">Выйти</a>
+            {% if user.is_superuser %}
+                <a href="/admin/" class="btn btn-default">Панель управления</a>
+            {% endif %}
         </div>
     {% else %}
         <div class="signin hide">
             <div class="form-group">
                 <input type="text" class="form-control" name="username"
-                       placeholder="Логин">
+                       placeholder="admin">
             </div>
             <div class="form-group">
                 <input type="password" class="form-control" name="password"
-                       placeholder="Пароль">
+                       placeholder="a12341234">
             </div>
             <a class="signin btn btn-default">Войти </a>
         </div>

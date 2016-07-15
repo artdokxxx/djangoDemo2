@@ -50,7 +50,8 @@ requirejs(['bootstrap', 'lodash'], function() {
         $('.user-auth .err').addClass('hide');
     });
 
-    $('.user-auth .btn.signin').on('click', function() {
+
+    let regitration_user = function() {
         let showErr = function (err) {
             err = _.trim(err);
             if (_.isEmpty(err)) {
@@ -70,7 +71,7 @@ requirejs(['bootstrap', 'lodash'], function() {
             login: _.trim($('.user-auth input[name=username]').val()),
             pwd: _.trim($('.user-auth input[name=password]').val())
         };
-        
+
         if (_.isEmpty(data['login']) || _.isEmpty(data['pwd'])) {
             //
         } else {
@@ -89,9 +90,12 @@ requirejs(['bootstrap', 'lodash'], function() {
             );
         }
         return false;
-    });
+    };
 
-    $('.user-auth .btn.logout').on('click', function() {
+    $('.user-auth .btn.signin').on('click', regitration_user);
+    $('form.user-auth').on('submit', regitration_user);
+
+    $('.btn.logout').on('click', function() {
         $.post(
             '/api/logout/',
             function (data) {

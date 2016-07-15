@@ -106,6 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-RU'
 LOCALE_PATHS = os.path.join(BASE_DIR, "locales"),
+FIXTURE_DIRS = [os.path.join(BASE_DIR, "fixtures"),]
 
 TIME_ZONE = 'UTC'
 
@@ -115,6 +116,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGIN_URL = '/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/

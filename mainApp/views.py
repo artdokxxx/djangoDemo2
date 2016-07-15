@@ -14,7 +14,7 @@ def user_registration(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            redirect('/')
+            return redirect('/')
         context = {'form': form}
     else:
         context = {'form': RegistrationForm()}

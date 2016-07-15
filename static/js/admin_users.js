@@ -20,6 +20,44 @@ requirejs.config({
 });
 
 requirejs(['bootstrap', 'lodash', 'fuelux'], function() {
+    //https://docs.djangoproject.com/en/1.9/ref/csrf/
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+        }
+    });
+
+    $('.logout').on('click', function() {
+        $.post(
+            '/api/logout/',
+            function (data) {
+                window.location.reload();
+            }
+        );
+    });
+
     var columns = [
         {
             label: 'Id',
@@ -34,7 +72,7 @@ requirejs(['bootstrap', 'lodash', 'fuelux'], function() {
         {
             label: 'Статус',
             property: 'is_active',
-            sortable: false
+            sortable: true
         },
         {
             label: 'Действия',
@@ -115,9 +153,14 @@ requirejs(['bootstrap', 'lodash', 'fuelux'], function() {
                 customMarkup = (rowData.is_active) ? '<span class="text-success">Активен</span>' : '<span class="text-warning">Деактивирован</span>';
                 break;
             case 'action':
-                customMarkup = '<a class="btn btn-default" style="margin-right: 10px" href="#" role="button"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>';
-                // FIXME: Add activate button if is_active false
-                customMarkup = customMarkup+'<a class="btn btn-default" href="#" onclick="if (!confirm(\'Подтвердите деактивацию пользователя - '+rowData.username+'\')) {return false;} else {delete_user('+rowData.id+');}" role="button"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>';
+                customMarkup = '<a class="btn btn-default" style="margin-right: 10px" href="#" onclick="show_form('+rowData.id+')" role="button"><span class="fa fa-edit" aria-hidden="true"></span></a>';
+                if (!rowData.i_am) {
+                    if (rowData.is_active) {
+                        customMarkup = customMarkup+'<a class="btn btn-danger" href="#" onclick="if (!confirm(\'Подтвердите деактивацию пользователя - '+rowData.username+'\')) {return false;} else {delete_user('+rowData.id+');}" role="button"><span class="fa fa-ban" aria-hidden="true"></span></a>';
+                    } else {
+                        customMarkup = customMarkup+'<a class="btn btn-success" href="#" onclick="if (!confirm(\'Подтвердите активацию пользователя - '+rowData.username+'\')) {return false;} else {activate_user('+rowData.id+');}" role="button"><span class="fa fa-power-off" aria-hidden="true"></span></a>';
+                    }
+                }
                 break;
             default:
                 customMarkup = helpers.item.text();
@@ -140,14 +183,69 @@ requirejs(['bootstrap', 'lodash', 'fuelux'], function() {
     });
 });
 
-    var delete_user = function (user_id) {
-        $.get(
-            '/api/users/delete/'+user_id+'/',
-            {},
-            function(data) {
-                if (!_.isUndefined(data['success'])) {
-                   $('#myRepeater').repeater('render');
-                }
+var delete_user = function (user_id) {
+    $.get(
+        '/api/users/delete/'+user_id+'/',
+        {},
+        function(data) {
+            if (!_.isUndefined(data['success'])) {
+               $('#myRepeater').repeater('render');
             }
-        );
-    };
+        }
+    );
+};
+
+var activate_user = function (user_id) {
+    $.get(
+        '/api/users/activation/'+user_id+'/',
+        {},
+        function(data) {
+            if (!_.isUndefined(data['success'])) {
+               $('#myRepeater').repeater('render');
+            }
+        }
+    );
+};
+
+var show_form = function (user_id) {
+    $.post(
+        '/admin/users/form/',
+        {'id': user_id},
+        function(data) {
+            if (!_.isUndefined(data['success']) && data['success']) {
+               $('#myRepeater').after(
+                   data['html']
+               );
+                $('#form-template .modal').modal('show');
+                $('#form-template .modal').on('hide.bs.modal', function (e) {
+                    $('#form-template').html('');
+                })
+            }
+        }
+    );
+};
+
+
+var change_user = function () {
+    $('#form-template .modal .alert.err').addClass('hide');
+    $('#form-template .modal .alert.err').html('');
+    $.post(
+        '/admin/users/change/',
+        $('#form-template form').serializeArray(),
+        function(data) {
+            if (!_.isUndefined(data['success']) && data['success']) {
+               $('#form-template .modal').modal('hide');
+                $('#myRepeater').repeater('render');
+            } else {
+                _.forEach(data['errors'], function(values, key) {
+                    $('#form-template .modal .alert.err').prepend(
+                        '<p> Поле "'+
+                            data["fields_error"][key]
+                        +'" - '+values[0]+'</p>'
+                    );
+                });
+                $('#form-template .modal .alert.err.hide').removeClass('hide');
+            }
+        }
+    );
+};

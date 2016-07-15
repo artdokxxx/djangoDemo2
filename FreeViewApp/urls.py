@@ -20,26 +20,29 @@ import apiApp.views as api
 
 
 urlpatterns = [
-    url(r'^$', main, name='Главная страница')
+    url(r'^$', main, name='main_page')  #Главная страница
 ]
 
 # Users
 urlpatterns += [
-    url(r'^user\/registration\/$', user_registration, name='Регистрация'),
+    url(r'^user\/registration\/$', user_registration, name='registration'),  #Регистрация
 ]
 
 # API
 urlpatterns += [
-    url(r'^api\/sign_in\/$', api.sign_in, name='Авторизация'),
-    url(r'^api\/logout\/$', api.logout, name='Выход из учётной записи'),
-    url(r'^api\/users\/delete\/(\d+)\/$', api.delete, name='Удаление пользователя'),
-    url(r'^api\/users\/get\/$', api.lists, name='Получение списка пользователей'),
+    url(r'^api\/sign_in\/$', api.sign_in),  #Авторизация
+    url(r'^api\/logout\/$', api.logout),  #Выход из учётной записи
+    url(r'^api\/users\/delete\/(\d+)\/$', api.user_delete),  #Деактивация пользователя
+    url(r'^api\/users\/activation\/(\d+)\/$', api.user_activation),  #Активация пользователя
+    url(r'^api\/users\/get\/$', api.users_lists),  #Получение списка пользователей
 ]
 
 
 # ADMIN
 urlpatterns += [
-    url(r'^admin\/$', admin.main, name='Дашбоард'),
-    url(r'^admin\/users/$', admin.users_list, name='Управление пользователями'),
-    url(r'^admin\/films/$', admin.main, name='Управление фильмами'),
+    url(r'^admin\/$', admin.main, name='dashboard'),  #Дашбоард
+    url(r'^admin\/users\/$', admin.users_list, name='users'),  #Управление пользователями
+    url(r'^admin\/users\/form\/$', admin.get_user_form),  #Получение формы редактирования создания пользователя
+    url(r'^admin\/users\/change\/$', admin.create_user),  #Создание/Изменение пользователя
+    url(r'^admin\/films\/$', admin.main, name='films'), #Управление фильмами
 ]
