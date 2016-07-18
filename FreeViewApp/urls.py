@@ -35,6 +35,13 @@ urlpatterns += [
     url(r'^api\/users\/delete\/(\d+)\/$', api.user_delete),  #Деактивация пользователя
     url(r'^api\/users\/activation\/(\d+)\/$', api.user_activation),  #Активация пользователя
     url(r'^api\/users\/get\/$', api.users_lists),  #Получение списка пользователей
+
+    url(r'^api\/films\/delete\/(\d+)\/$', api.film_delete), # Деактивация пользователя
+    url(r'^api\/films\/activation\/(\d+)\/$', api.film_activation), # Активация пользователя
+    url(r'^api\/films\/get\/$', api.films_list), # Получение списка пользователей
+
+    url(r'^api\/films\/form\/$', api.film_form), # Получение формы редактирования создания пользователя
+    url(r'^api\/films\/change\/$', api.film_create), # Создание/Изменение пользователя
 ]
 
 
@@ -44,5 +51,5 @@ urlpatterns += [
     url(r'^admin\/users\/$', admin.users_list, name='users'),  #Управление пользователями
     url(r'^admin\/users\/form\/$', admin.get_user_form),  #Получение формы редактирования создания пользователя
     url(r'^admin\/users\/change\/$', admin.create_user),  #Создание/Изменение пользователя
-    url(r'^admin\/films\/$', admin.main, name='films'), #Управление фильмами
+    url(r'^admin\/films\/$', admin.films, name='films'), #Управление фильмами
 ]

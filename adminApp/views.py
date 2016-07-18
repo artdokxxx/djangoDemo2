@@ -75,6 +75,5 @@ def create_user(request):
 
 
 @user_passes_test(lambda u: u.is_superuser)
-def films_list(request):
-    #TODO: Сделать страницу + вьюху для управления фильмами
-    return render(request, 'admin/index.html')
+def films(request):
+    return render(request, 'admin/films.html')

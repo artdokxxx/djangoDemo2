@@ -1,5 +1,5 @@
 from django.template import Library
-from django.forms.fields import CheckboxInput
+from django.forms.fields import CheckboxInput, SelectMultiple
 register = Library()
 
 
@@ -18,6 +18,11 @@ def label_add_class(value, arg):
 @register.filter(name='is_checkbox')
 def is_checkbox(value):
     return isinstance(value, CheckboxInput)
+
+
+@register.filter(name='is_select_multiple')
+def is_checkbox(value):
+    return isinstance(value, SelectMultiple)
 
 
 @register.simple_tag
