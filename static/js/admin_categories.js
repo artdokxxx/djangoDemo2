@@ -56,7 +56,7 @@ requirejs(['main'], function (main) {
             $.ajax({
                 method: "GET",
                 data: data,
-                url: "/api/films/get",
+                url: "/api/categories/get",
                 success: function (result) {
                     var firstItem, lastItem;
                     firstItem = options.pageIndex * (options.pageSize || 50);
@@ -93,15 +93,15 @@ requirejs(['main'], function (main) {
                     customMarkup = '<a href="#">' + rowData.name + '</a>';
                     break;
                 case 'is_active':
-                    customMarkup = (rowData.is_active) ? '<span class="text-success">Активен</span>' : '<span class="text-warning">Деактивирован</span>';
+                    customMarkup = (rowData.is_active) ? '<span class="text-success">Активна</span>' : '<span class="text-warning">Деактивирована</span>';
                     break;
                 case 'action':
                     customMarkup = '<a class="btn btn-default" style="margin-right: 10px" href="#" onclick="show_form(' + rowData.id + ')" role="button"><span class="fa fa-edit" aria-hidden="true"></span></a>';
                     if (!rowData.i_am) {
                         if (rowData.is_active) {
-                            customMarkup = customMarkup + '<a class="btn btn-danger" href="#" onclick="if (!confirm(\'Подтвердите деактивацию - ' + rowData.name + '\')) {return false;} else {delete_film(' + rowData.id + ');}" role="button"><span class="fa fa-ban" aria-hidden="true"></span></a>';
+                            customMarkup = customMarkup + '<a class="btn btn-danger" href="#" onclick="if (!confirm(\'Подтвердите деактивацию - ' + rowData.name + '\')) {return false;} else {delete_obj(' + rowData.id + ');}" role="button"><span class="fa fa-ban" aria-hidden="true"></span></a>';
                         } else {
-                            customMarkup = customMarkup + '<a class="btn btn-success" href="#" onclick="if (!confirm(\'Подтвердите активацию - ' + rowData.name + '\')) {return false;} else {activate_film(' + rowData.id + ');}" role="button"><span class="fa fa-power-off" aria-hidden="true"></span></a>';
+                            customMarkup = customMarkup + '<a class="btn btn-success" href="#" onclick="if (!confirm(\'Подтвердите активацию - ' + rowData.name + '\')) {return false;} else {activate_obj(' + rowData.id + ');}" role="button"><span class="fa fa-power-off" aria-hidden="true"></span></a>';
                         }
                     }
                     break;
@@ -129,9 +129,9 @@ requirejs(['main'], function (main) {
     });
 });
 
-var delete_film = function (user_id) {
+var delete_obj = function (id) {
     $.get(
-        '/api/films/delete/'+user_id+'/',
+        '/api/categories/delete/'+id+'/',
         {},
         function(data) {
             if (!_.isUndefined(data['success'])) {
@@ -141,9 +141,9 @@ var delete_film = function (user_id) {
     );
 };
 
-var activate_film = function (user_id) {
+var activate_obj = function (id) {
     $.get(
-        '/api/films/activation/'+user_id+'/',
+        '/api/categories/activation/'+id+'/',
         {},
         function(data) {
             if (!_.isUndefined(data['success'])) {
@@ -155,7 +155,7 @@ var activate_film = function (user_id) {
 
 var show_form = function (user_id) {
     $.post(
-        '/api/films/form/',
+        '/api/categories/form/',
         {'id': user_id},
         function(data) {
             if (!_.isUndefined(data['success']) && data['success']) {
@@ -176,7 +176,7 @@ var change_obj = function () {
     $('#form-template .modal .alert.err').addClass('hide');
     $('#form-template .modal .alert.err').html('');
     $.post(
-        '/api/films/change/',
+        '/api/categories/change/',
         $('#form-template form').serializeArray(),
         function(data) {
             if (!_.isUndefined(data['success']) && data['success']) {

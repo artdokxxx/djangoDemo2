@@ -18,6 +18,10 @@ from mainApp.views import *
 import adminApp.views as admin
 import apiApp.views as api
 
+from django.contrib.auth.models import User
+from mainApp.models import *
+from mainApp.forms import *
+
 
 urlpatterns = [
     url(r'^$', main, name='main_page')  #Главная страница
@@ -32,16 +36,21 @@ urlpatterns += [
 urlpatterns += [
     url(r'^api\/sign_in\/$', api.sign_in),  #Авторизация
     url(r'^api\/logout\/$', api.logout),  #Выход из учётной записи
-    url(r'^api\/users\/delete\/(\d+)\/$', api.user_delete),  #Деактивация пользователя
-    url(r'^api\/users\/activation\/(\d+)\/$', api.user_activation),  #Активация пользователя
+    url(r'^api\/users\/delete\/(?P<id>\d+)\/$', api.active_elem, {'model': User, 'active': False}),  #Деактивация пользователя
+    url(r'^api\/users\/activation\/(?P<id>\d+)\/$', api.active_elem, {'model': User}),  #Активация пользователя
     url(r'^api\/users\/get\/$', api.users_lists),  #Получение списка пользователей
 
-    url(r'^api\/films\/delete\/(\d+)\/$', api.film_delete), # Деактивация пользователя
-    url(r'^api\/films\/activation\/(\d+)\/$', api.film_activation), # Активация пользователя
-    url(r'^api\/films\/get\/$', api.films_list), # Получение списка пользователей
+    url(r'^api\/films\/delete\/(\d+)\/$', api.active_elem, {'model': Films, 'active': False}), # Деактивация пользователя
+    url(r'^api\/films\/activation\/(\d+)\/$', api.active_elem, {'model': Films}), # Активация пользователя
+    url(r'^api\/films\/get\/$', api.get_list, {'model': Films}), # Получение списка пользователей
+    url(r'^api\/films\/form\/$', api.get_form, {'model': Films, 'form': FilmForm}), # Получение формы редактирования создания пользователя
+    url(r'^api\/films\/change\/$', api.elem_create, {'model': Films, 'form': FilmForm}), # Создание/Изменение пользователя
 
-    url(r'^api\/films\/form\/$', api.film_form), # Получение формы редактирования создания пользователя
-    url(r'^api\/films\/change\/$', api.film_create), # Создание/Изменение пользователя
+    url(r'^api\/categories\/delete\/(\d+)\/$', api.active_elem, {'model': Categories, 'active': False}), # Деактивация категории
+    url(r'^api\/categories\/activation\/(\d+)\/$', api.active_elem, {'model': Categories}), # Активация категории
+    url(r'^api\/categories\/get\/$', api.get_list, {'model': Categories}), # Получение списка категорий
+    url(r'^api\/categories\/form\/$', api.get_form, {'model': Categories, 'form': CategoryForm}), # Получение формы редактирования создания категории
+    url(r'^api\/categories\/change\/$', api.elem_create, {'model': Categories, 'form': CategoryForm}), # Создание/Изменение категории
 ]
 
 
@@ -52,4 +61,5 @@ urlpatterns += [
     url(r'^admin\/users\/form\/$', admin.get_user_form),  #Получение формы редактирования создания пользователя
     url(r'^admin\/users\/change\/$', admin.create_user),  #Создание/Изменение пользователя
     url(r'^admin\/films\/$', admin.films, name='films'), #Управление фильмами
+    url(r'^admin\/categories\/$', admin.categories, name='categories'), #Управление фильмами
 ]

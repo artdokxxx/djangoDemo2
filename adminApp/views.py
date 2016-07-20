@@ -77,3 +77,8 @@ def create_user(request):
 @user_passes_test(lambda u: u.is_superuser)
 def films(request):
     return render(request, 'admin/films.html')
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def categories(request):
+    return render(request, 'admin/categories.html')

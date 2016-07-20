@@ -10,9 +10,9 @@
                             aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">
                         {% if id %}
-                            Редактирование фильма
+                            Редактирование элемента
                         {% else %}
-                            Добавление фильма
+                            Добавление элемента
                         {% endif %}
                     </h4>
                 </div>
@@ -64,9 +64,9 @@
                             {% endif %}
                         {% endfor %}
                         {% if id %}
-                            <input type="submit" onclick="change_film({{ id }}); return false;" class="btn btn-default" value="Сохранить">
+                            <input type="submit" onclick="change_obj({{ id }}); return false;" class="btn btn-default" value="Сохранить">
                         {% else %}
-                            <input type="submit" onclick="change_film(); return false;" class="btn btn-default" value="Добавить фильм">
+                            <input type="submit" onclick="change_obj(); return false;" class="btn btn-default" value="Добавить элемент">
                         {% endif %}
                     </form>
                 </div>
