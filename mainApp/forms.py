@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from mainApp.models import Films
+from mainApp.models import Films, Categories
 
 
 class RegistrationForm(UserCreationForm):
@@ -22,3 +22,9 @@ class FilmForm(forms.ModelForm):
     class Meta:
         model = Films
         fields = ['category', 'name', 'image', 'preview', 'desc']
+
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Categories
+        fields = ['name', 'desc']

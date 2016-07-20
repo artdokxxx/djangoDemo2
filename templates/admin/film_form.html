@@ -44,16 +44,7 @@
                                         {{ field|label_add_class:'control-form' }}
                                     </div>
                                     <div>
-                                        <select name="{{ field.name }}" multiple class="form-control">
-                                            {% for instance in field.field.queryset %}
-                                                <option
-                                                        value="{{ instance.pk }}"
-                                                        {# FIXME: Не понял как сделать  получение выбранных записей - selected #}
-                                                >
-                                                    {{ instance.name }}
-                                                </option>
-                                            {% endfor %}
-                                        </select>
+                                        {{ field|add_class:'form-control'}}
                                     </div>
                             {% else %}
                                 <div class="form-group">

@@ -5,6 +5,9 @@ class Categories(models.Model):
     name = models.CharField(verbose_name='Название категории', max_length=32, unique=True)
     desc = models.TextField(verbose_name='Описание категории', blank=True, null=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Films(models.Model):
     category = models.ManyToManyField(Categories, verbose_name='Категории')
@@ -13,3 +16,6 @@ class Films(models.Model):
     image = models.CharField(verbose_name='Обложка', max_length=64)
     preview = models.CharField(verbose_name='Превью', max_length=64, blank=True)
     desc = models.TextField(verbose_name='Описание', blank=True)
+
+    class Meta:
+        verbose_name = 'Фильм'

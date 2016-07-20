@@ -5,11 +5,12 @@ from django.contrib import auth
 from django.forms.models import model_to_dict
 from django.contrib.auth.models import User
 from django.http import JsonResponse, Http404
-from mainApp.models import Films
-from mainApp.forms import FilmForm
 from django.template.context_processors import csrf
 from django.template import loader
+from django.shortcuts import get_object_or_404
 
+from mainApp.models import Films
+from mainApp.forms import FilmForm, CategoryForm
 
 @csrf_protect
 def sign_in(request):
@@ -173,7 +174,8 @@ def film_create(request):
         if not film_id:
             film = FilmForm(request.POST)
         else:
-            film = FilmForm(request.POST or None, instance=film)
+            film = get_object_or_404(Films, id=film_id)
+            film = FilmForm(request.POST, instance=film)
         if film.is_valid():
             film.save()
             res = _success()
@@ -209,6 +211,47 @@ def film_form(request):
         return res
     raise Http404
 
+
+@user_passes_test(lambda u: u.is_superuser)
+def category_form(request):
+    res = _fail()
+
+    if request.method == 'POST' and request.is_ajax():
+        _form = CategoryForm()
+        context = {'form': _form}
+
+        context.update(csrf(request))
+        html = loader.render_to_string('admin/category_form.html',
+                                       context)
+
+        res = _success(html=html)
+        return res
+    raise Http404
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def category_create(request):
+    def get_field_name(form, code):
+        return str(form.fields[code].label)
+    res = _fail()
+
+    if request.method == 'POST' and request.is_ajax():
+        category = None
+        category_id = request.POST.get('id', False)
+        if not category_id:
+            category = CategoryForm(request.POST)
+        else:
+            category = CategoryForm(request.POST or None, instance=category)
+        if category.is_valid():
+            category.save()
+            res = _success()
+        else:
+            res = _fail(
+                errors= category.errors,
+                fields_error = {key: get_field_name(category, key) for key in category.errors}
+            )
+
+    return res
 
 # End region
 
