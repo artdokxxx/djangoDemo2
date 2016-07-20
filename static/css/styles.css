@@ -11,7 +11,15 @@ header .user-auth .err {
 footer {
   height: 60px;
 }
+.films-list img {
+  max-height: 120px;
+}
 .films-list p.desc {
   height: 125px;
   overflow: hidden;
+}
+.films-list h3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

@@ -4,7 +4,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import auth
 from django.forms.models import model_to_dict
 from django.contrib.auth.models import User
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from mainApp.models import Films
 from mainApp.forms import FilmForm
 from django.template.context_processors import csrf
